@@ -1,0 +1,7 @@
+package proto;
+
+message Message {
+  required string localAddress = 1;
+  required string remoteAddress = 2;
+  required string token = 3;
+}

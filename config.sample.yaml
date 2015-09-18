@@ -1,0 +1,13 @@
+token: token
+
+tls:
+    enabled: false
+
+services:
+    ssh:
+        address: :8022
+        host: demo.honeytrap.io:22
+    http:
+        address: :8080
+        host: demo.honeytrap.io:80
+        
