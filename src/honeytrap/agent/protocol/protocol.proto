@@ -1,7 +1,8 @@
 package proto;
 
-message Message {
-  required string localAddress = 1;
-  required string remoteAddress = 2;
-  required string token = 3;
+message Payload {
+  required string token = 1;
+  required string localAddress = 2;
+  required string remoteAddress = 3;
+  required string protocol = 4;
 }

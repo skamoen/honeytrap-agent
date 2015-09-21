@@ -42,10 +42,11 @@ func (c *conn) serve() {
 
 	defer cc.Close()
 
-	message := protocol.Message{
+	message := protocol.Payload{
 		LocalAddress:  &localAddr,
 		RemoteAddress: &remoteAddr,
 		Token:         &token,
+		Protocol:      &c.sc.Protocol,
 	}
 
 	data, err := proto.Marshal(&message)

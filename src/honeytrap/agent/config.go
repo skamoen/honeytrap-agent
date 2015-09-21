@@ -24,8 +24,9 @@ type (
 	}
 
 	ServiceConfig struct {
-		Address string `yaml:"address"`
-		Host    string `yaml:"host"`
+		Address  string `yaml:"address"`
+		Host     string `yaml:"host"`
+		Protocol string `yaml:"protocol"`
 	}
 )
 
