@@ -7,10 +7,10 @@ Honeytrap Agent will listen on the configured ports and forward all traffic to H
 We're using gb as build tool.
 
 ```
-go get github.com/constabulary/gb/...
-gb build
+go get github.com/honeytrap/agent
+go build -o bin/agent
 ```
 
 ## License
-To be determined. All right reserved Remco Verhoef. 
+To be determined. All right reserved Remco Verhoef.
 
