@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/honeytrap/agent/agent/protocol"
+	"github.com/honeytrap/agent/src/protocol"
 
 	"github.com/golang/protobuf/proto"
 )

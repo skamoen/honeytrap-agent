@@ -10,7 +10,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/pkg/profile"
 
-	agent "github.com/honeytrap/agent/agent"
+	agent "github.com/honeytrap/agent/src/agent"
 	logging "github.com/op/go-logging"
 
 	_ "net/http/pprof"

@@ -9,7 +9,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	protocol "github.com/honeytrap/agent/agent/protocol"
+	protocol "github.com/honeytrap/agent/src/protocol"
 )
 
 const (
