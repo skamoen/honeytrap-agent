@@ -1,0 +1,15 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: protobuf
+Source: https://github.com/golang/protobuf
+
+Files: *
+Copyright: 2014 Go
+License: BSD-3-clause
+
+Files: debian/*
+Copyright: 2016 root <TODO>
+License: BSD-3-clause
+Comment: Debian packaging is licensed under the same terms as upstream
+
+License: BSD-3-clause
+TODO

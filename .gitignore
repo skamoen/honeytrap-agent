@@ -2,3 +2,11 @@
 config.yaml
 bin
 *.bak
+
+# debian temp files
+debian/agent.debhelper.log
+debian/agent.substvars
+debian/agent/
+debian/debhelper-build-stamp
+debian/files
+obj-x86_64-linux-gnu/
