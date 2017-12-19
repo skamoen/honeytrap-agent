@@ -1,22 +1,45 @@
-language: generic
-sudo: true
+language: go
+
+go:
+- 1.9.1
+
+sudo: required
 dist: trusty
-before_install:
-- sudo apt-get update
-- sudo apt-get install debhelper build-essential dh-virtualenv dialog python-nose
+
+go_import_path: github.com/honeytrap/honeytrap-agent
+
+services:
+ - docker
+
+os:
+- linux
+
+env:
+- ARCH=x86_64
+
+addons:
+  apt:
+    packages:
+    - lxc
+
 install:
-- sudo pip install .
+  - sudo apt-get install -y software-properties-common python-software-properties
+  - sudo add-apt-repository -y ppa:ubuntu-lxc/stable
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" lxc-dev
+  - go get -u -v github.com/alecthomas/gometalinter
+  - go get -u -v github.com/honeytrap/honeytrap-agent
+  - gometalinter --install
+
 script:
-- nosetests
+  # - gometalinter --deadline 2m --errors --vendor ./...
+  - go test -v ./...
+  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go build ./...
+  - GOARCH=arm go build ./...
+
 after_success:
-- dpkg-buildpackage
-deploy:
-  provider: bintray
-  file: descriptor.json
-  user: gijzelaerr
-  on:
-    tags: true
-  key:
-    secure: or71RwHHnymKhZeoxATCyZq/iorV14Uv6Rwomkf4x2yj2QWgsMCNNsRfmjiEu8dmZmDH9gyjPdebNfdg6VEZqsNbNBWlvCD81lKBFqaEO3IBKhEwDOcJtHFHmJGIJWvN5jnwKa8usX56pQF5gEbFkg9X+RFwHDpd7OUIJfYweUfG2P68DlKxwWhakDTqYi+MUO/l5GKE+mkgupPsgafYabu9O/cVGkutZCwy6WJi0UGg7Fnanas9q986927zzFjTPpx2IZW14URsSnrXilqaVEyoBF8Hs2gG4gzCIEb00Q3/WrNZMYtX19/OnB+7i6JFes9kdCafD+N3Hewm5KtP+wM5or7HVZrff2DrgxS+jcnR4zYYL8elVMy7nuQeeSoLVoWcm+k+Dd6lDIbZJPyOXkZ4hftS1xgnLgXbdoRo2ag7VAZU8AtBhhzIjSAv1HgffE8FNHsCUx3vUQdb+sKdZMuuqIlT175n8T9X/txzqMIFqdCChStrTLJq60V/PdnIRHHKWsAwXoun8wuEWPN0ttHRJAApmi2q43E4MkeQd7TyZXyhNBd2WHIcAWdd3C779EImrZKRm/gnfteQCP8AstGR9BC5Jn/mO1XDP4mR1EkAG6BmJ1lpWWyGtWK12U7DeVbnpqnRzq0auBIOKf/GbskHf91jqQgn0bRE/IatWq8=
-  passphrase:
-    secure: CAQolhuRXheRLXkwf4kV4sdZ8PWIpzyp7IDVIayjmR7fAmGzqKBFmF5cSqI8vO7ZPIggoYwUvvysjpnI6dxbySjXTk0WydgkeRXSL1lD6QRI9Io6z+QN1Ew34tW34i4QptPI/JTg3czg+SfrwNSbcAUkLd7Zmuh/qsmK/Wr4SlH8lsy9WBe9p2muWXDGzXlpVzCuUmU0GRBJgRkq2nh011zlBScUC2Si/Se3Ok179dTmwD07gq70vjicoR6a0v22l7c9SsBdM2I7f2BcFBkmFTGxIibzNRx5E7VNcAKYcac4zFmRVzkk6E7ZXnQ/QxWeRbJl2YSaz9vzoK2LmT7pVsX6i/mHdD9QMEniMBfcSTfkgkW3ctJvtkLNKp2W45kHrPvH/AWNjz9pg7VcjayQxiGmkBxNVi70DUwQeylQsnSquaSkTHH17zehkSUdlihocddtawD06RQdgyq/1IYSoeXEJPQM0DGpKI9ENasw2ITcf1pnaO33KtxwvhffgsgtzfWxPbMINK6SwAtNuDrBXNeWfhx/1Ynv2cJ8RX4FL24vJIiVpYVBwlRTTQ1KfWSHh30onzITVlXrb9I3wVajro7ThkqBFkXxkd8f75vafBTR0rsaLSyASvNtNO4QWoYIG18QIXQO3ZmpNcCCD0smFMDNblP+PwNXUOMoBljkPNs=
+- bash <(curl -s https://codecov.io/bash)
+
+-notifications:
+  slack: honeycast:P9gQukyVSKgFEyoGh2efeK1H 

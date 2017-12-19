@@ -7,8 +7,8 @@ Build-Depends: debhelper (>= 9),
                golang-go,
                golang-goprotobuf-dev
 Standards-Version: 3.9.7
-Homepage: https://github.com/honeytrap/agent
-XS-Go-Import-Path: github.com/honeytrap/agent
+Homepage: https://github.com/honeytrap/honeytrap-agent
+XS-Go-Import-Path: github.com/honeytrap/honeytrap-agent
 
 Package: agent
 Architecture: any
