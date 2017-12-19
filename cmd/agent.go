@@ -55,6 +55,13 @@ func serve(c *cli.Context) error {
 
 	options = append(options, server.WithServer(c.Args().First()))
 
+	if key := c.GlobalString("remote-key"); key != "" {
+		options = append(options, server.WithKey(key))
+	} else {
+		ec := cli.NewExitError(fmt.Errorf(color.RedString("No remote key set.")), 1)
+		return ec
+	}
+
 	srvr, err := server.New(
 		options...,
 	)
@@ -104,7 +111,13 @@ Commit-ID: %s
 
 	app.Action = serve
 
-	app.Flags = append(app.Flags, []cli.Flag{}...)
+	app.Flags = append(app.Flags, []cli.Flag{
+		cli.StringFlag{
+			Name:  "remote-key,k",
+			Value: "",
+			Usage: "Remote key of server",
+		},
+	}...)
 
 	return app
 }

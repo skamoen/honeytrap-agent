@@ -35,17 +35,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"net"
-	"time"
 )
-
-func DialTimeout(network, host string, timeout time.Duration) (*agentConnection, error) {
-	conn, err := net.DialTimeout(network, host, timeout)
-	if err != nil {
-		return nil, err
-	}
-
-	return &agentConnection{conn}, nil
-}
 
 type agentConnection struct {
 	net.Conn

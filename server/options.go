@@ -31,6 +31,7 @@
 package server
 
 import (
+	"encoding/hex"
 	"io/ioutil"
 	"os"
 	"os/user"
@@ -82,6 +83,15 @@ func HomeDir() string {
 	}
 
 	return p
+}
+
+func WithKey(key string) OptionFn {
+	v, _ := hex.DecodeString(key)
+
+	return func(h *Agent) error {
+		h.RemoteKey = v
+		return nil
+	}
 }
 
 func WithServer(server string) OptionFn {

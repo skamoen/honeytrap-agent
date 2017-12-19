@@ -8,10 +8,10 @@
   revision = "5df930a27be2502f99b292b7cc09ebad4d0891f4"
 
 [[projects]]
-  name = "github.com/imdario/mergo"
-  packages = ["."]
-  revision = "7fe0c75c13abdee74b09fcacef5ea1c6bba6a874"
-  version = "0.2.4"
+  branch = "master"
+  name = "github.com/honeytrap/honeytrap-agent"
+  packages = ["cmd","server"]
+  revision = "310fa483c20290c262e564241c334faadb7f7a00"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -27,6 +27,18 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/mimoo/StrobeGo"
+  packages = ["strobe"]
+  revision = "43f0c284a7f9a40527b14a06a93a1a69f480cf91"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mimoo/disco"
+  packages = ["libdisco"]
+  revision = "911dedbad3878426881579e4d2d6c4169981089c"
+
+[[projects]]
+  branch = "master"
   name = "github.com/op/go-logging"
   packages = ["."]
   revision = "970db520ece77730c7e4724c61121037378659d9"
@@ -36,6 +48,12 @@
   packages = ["."]
   revision = "02dd45c33376f85d1064355dc790dcc4850596b1"
   version = "v1.1"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["curve25519","ed25519","ed25519/internal/edwards25519"]
+  revision = "d585fd2cc9195196078f516b69daff6744ef5e84"
 
 [[projects]]
   branch = "master"
@@ -49,15 +67,9 @@
   packages = ["."]
   revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
 
-[[projects]]
-  branch = "v2"
-  name = "gopkg.in/yaml.v2"
-  packages = ["."]
-  revision = "287cf08546ab5e7e37d55a84f7ed3fd1db036de5"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5d700412147468afe605ef14fe1716cfbd8e13d0d2459530bed21ad6cfc1694e"
+  inputs-digest = "255886ba59c71aa03aea9aae40b54c175aa6177968dd8cbb4eed5e4ea0b1d0a3"
   solver-name = "gps-cdcl"
   solver-version = 1

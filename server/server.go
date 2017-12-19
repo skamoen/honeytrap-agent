@@ -39,6 +39,8 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/mimoo/disco/libdisco"
+
 	logging "github.com/op/go-logging"
 )
 
@@ -68,14 +70,14 @@ func (c Connections) Get(laddr net.Addr, raddr net.Addr) *conn {
 type Agent struct {
 	config *Config
 
-	in  chan encoding.BinaryMarshaler
-	out chan []byte
+	in chan encoding.BinaryMarshaler
 
 	conns Connections
 
 	token string
 
-	Server string
+	Server    string
+	RemoteKey []byte
 }
 
 func New(options ...OptionFn) (*Agent, error) {
@@ -154,11 +156,19 @@ func (a *Agent) Run(ctx context.Context) {
 			func() {
 				fmt.Println(color.YellowString("Connecting to Honeytrap... "))
 
-				cc, err := DialTimeout("tcp", a.Server, time.Second*30)
+				// configure the Disco connection
+				clientConfig := libdisco.Config{
+					HandshakePattern: libdisco.Noise_NK,
+					RemoteKey:        a.RemoteKey,
+				}
+
+				conn, err := libdisco.Dial("tcp", a.Server, &clientConfig)
 				if err != nil {
-					log.Errorf("Failed to connect to Honeytrap: %s", err.Error())
+					log.Errorf("Error connecting to server: %s: %s", a.Server, err.Error())
 					return
 				}
+
+				cc := &agentConnection{conn}
 
 				defer cc.Close()
 
