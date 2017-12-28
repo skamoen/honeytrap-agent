@@ -219,9 +219,13 @@ func (a *Agent) Run(ctx context.Context) {
 					}
 				}
 
+				// Create a context for closing the following goroutines
+				rwctx, rwcancel := context.WithCancel(context.Background())
 				go func() {
 					for {
 						select {
+						case <- rwctx.Done():
+							return
 						case <-time.After(time.Second * 5):
 							cc.send(Ping{})
 						case data, ok := <-a.in:
@@ -237,6 +241,7 @@ func (a *Agent) Run(ctx context.Context) {
 				for {
 					o, err := cc.receive()
 					if err == io.EOF {
+						rwcancel()
 						return
 					} else if err != nil {
 						fmt.Println(err.Error())
