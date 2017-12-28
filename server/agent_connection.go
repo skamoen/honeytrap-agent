@@ -35,6 +35,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"net"
+	"fmt"
 )
 
 type agentConnection struct {
@@ -45,10 +46,10 @@ func (ac agentConnection) receive() (interface{}, error) {
 	buff := make([]byte, 1)
 
 	n, err := ac.Conn.Read(buff)
-	if n == 0 {
-		return nil, errors.New("Could not read object")
-	} else if err != nil {
+	if err != nil {
 		return nil, err
+	} else if n == 0 {
+		return nil, errors.New("Could not read object")
 	}
 
 	type_ := int(buff[0])
@@ -73,10 +74,10 @@ func (ac agentConnection) receive() (interface{}, error) {
 	buff = make([]byte, 2)
 
 	n, err = ac.Conn.Read(buff)
-	if n == 0 {
-		return nil, errors.New("Could not read object")
-	} else if err != nil {
+	if err != nil {
 		return nil, err
+	} else if n == 0 {
+		return nil, errors.New("Could not read object")
 	}
 
 	size := binary.LittleEndian.Uint16(buff)
@@ -123,10 +124,12 @@ func (ac agentConnection) send(o encoding.BinaryMarshaler) error {
 	binary.LittleEndian.PutUint16(buff[0:2], uint16(len(data)))
 
 	if _, err := ac.Conn.Write(buff); err != nil {
+		fmt.Printf("Error occured: %s \n", err.Error())
 		return err
 	}
 
 	if _, err := ac.Conn.Write(data); err != nil {
+		fmt.Printf("Error occured: %s \n", err.Error())
 		return err
 	}
 
