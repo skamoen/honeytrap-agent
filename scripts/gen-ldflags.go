@@ -42,11 +42,11 @@ import (
 
 func genLDFlags(version string) string {
 	var ldflagsStr string
-	ldflagsStr = "-X github.com/honeytrap/honeytrap-agent/cmd.Version=" + version
-	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/cmd.ReleaseTag=" + releaseTag(version)
-	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/cmd.CommitID=" + commitID()
-	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/cmd.ShortCommitID=" + commitID()[:12]
-	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/cmd.GOPATH=" + os.Getenv("GOPATH")
+	ldflagsStr = "-X github.com/honeytrap/honeytrap-agent/server.Version=" + version
+	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/server.ReleaseTag=" + releaseTag(version)
+	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/server.CommitID=" + commitID()
+	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/server.ShortCommitID=" + commitID()[:12]
+	ldflagsStr += " -X github.com/honeytrap/honeytrap-agent/server.GOPATH=" + os.Getenv("GOPATH")
 	return ldflagsStr
 }
 

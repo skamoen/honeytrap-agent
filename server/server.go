@@ -147,7 +147,10 @@ func localIP() string {
 }
 
 func (a *Agent) Run(ctx context.Context) {
-	log.Info("Honeytrap Agent started.")
+	fmt.Println(color.YellowString("Honeytrap Agent starting (%s)...", a.token))
+	fmt.Println(color.YellowString("Version: %s (%s)", Version, ShortCommitID))
+
+	defer fmt.Println("Honeytrap Agent stopped.")
 
 	go func() {
 		for {
@@ -224,7 +227,7 @@ func (a *Agent) Run(ctx context.Context) {
 				go func() {
 					for {
 						select {
-						case <- rwctx.Done():
+						case <-rwctx.Done():
 							return
 						case <-time.After(time.Second * 5):
 							cc.send(Ping{})
