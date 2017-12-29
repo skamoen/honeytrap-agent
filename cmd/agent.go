@@ -84,9 +84,6 @@ func serve(c *cli.Context) error {
 		}
 	}()
 
-	log.Info("Honeytrap Agent starting...")
-	defer log.Info("Honeytrap Agent stopped.")
-
 	srvr.Run(ctx)
 	return nil
 }
