@@ -36,6 +36,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"os"
 	"time"
 
 	"github.com/fatih/color"
@@ -45,6 +46,9 @@ import (
 )
 
 var log = logging.MustGetLogger("agent")
+var format = logging.MustStringFormatter(
+	`%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}`,
+)
 
 type Config struct {
 }
@@ -149,6 +153,12 @@ func localIP() string {
 func (a *Agent) Run(ctx context.Context) {
 	fmt.Println(color.YellowString("Honeytrap Agent starting (%s)...", a.token))
 	fmt.Println(color.YellowString("Version: %s (%s)", Version, ShortCommitID))
+
+	backend := logging.NewLogBackend(os.Stdout, "", 0)
+	backendFormatter := logging.NewBackendFormatter(backend, format)
+	backendLeveled := logging.AddModuleLevel(backend)
+	backendLeveled.SetLevel(logging.DEBUG, "")
+	logging.SetBackend(backendLeveled, backendFormatter)
 
 	defer fmt.Println("Honeytrap Agent stopped.")
 
