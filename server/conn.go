@@ -29,8 +29,10 @@ func (c *conn) Close() {
 }
 
 func (c *conn) serve() {
+	log.Debugf("Serving connection from %s => %s", c.RemoteAddr().String(), c.LocalAddr().String())
 	// TODO: add inactivity timeout
 	defer c.Close()
+	defer log.Debugf("Closing connection from %s => %s", c.RemoteAddr().String(), c.LocalAddr().String())
 
 	c.agent.in <- Hello{
 		Token: c.agent.token,
@@ -42,6 +44,7 @@ func (c *conn) serve() {
 		for buf := range c.out {
 			_, err := c.Write(buf)
 			if err == io.EOF {
+				log.Debugf("EOF on connection write from %s => %s", c.RemoteAddr().String(), c.LocalAddr().String())
 				return
 			} else if err != nil {
 				log.Error(err.Error())
@@ -56,6 +59,7 @@ func (c *conn) serve() {
 		for {
 			nr, er := c.Read(buf)
 			if er == io.EOF {
+				log.Debugf("EOF on connection read from %s => %s", c.RemoteAddr().String(), c.LocalAddr().String())
 				return
 			} else if er != nil {
 				log.Error(er.Error())

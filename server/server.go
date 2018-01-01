@@ -118,6 +118,7 @@ func (a *Agent) serv(l net.Listener) error {
 
 		c, err := a.newConn(rw)
 		if err != nil {
+			log.Errorf("Error creating new connection: %s", err.Error())
 			continue
 		}
 
