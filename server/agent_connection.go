@@ -34,7 +34,6 @@ import (
 	"encoding"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"net"
 )
 
@@ -142,12 +141,12 @@ func (ac agentConnection) send(o encoding.BinaryMarshaler) error {
 	binary.LittleEndian.PutUint16(buff[0:2], uint16(len(data)))
 
 	if _, err := ac.Conn.Write(buff); err != nil {
-		fmt.Printf("Error occured: %s \n", err.Error())
+		log.Errorf("Error occured writing data length: %s \n", err.Error())
 		return err
 	}
 
 	if _, err := ac.Conn.Write(data); err != nil {
-		fmt.Printf("Error occured: %s \n", err.Error())
+		log.Errorf("Error occured writing data: %s \n", err.Error())
 		return err
 	}
 
