@@ -35,7 +35,6 @@ import (
 	"encoding"
 	"io"
 	"net"
-	"os"
 	"time"
 
 	"github.com/mimoo/disco/libdisco"
@@ -44,9 +43,6 @@ import (
 )
 
 var log = logging.MustGetLogger("agent")
-var format = logging.MustStringFormatter(
-	`%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}`,
-)
 
 type Config struct {
 }
@@ -151,10 +147,6 @@ func localIP() string {
 func (a *Agent) Run(ctx context.Context) {
 	log.Infof("Honeytrap Agent starting (%s)...", a.token)
 	log.Infof("Version: %s (%s)", Version, ShortCommitID)
-
-	backend := logging.NewLogBackend(os.Stdout, "", 0)
-	backendFormatter := logging.NewBackendFormatter(backend, format)
-	logging.SetBackend(backend, backendFormatter)
 
 	defer log.Infof("Honeytrap Agent stopped.")
 
