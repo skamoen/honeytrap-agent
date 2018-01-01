@@ -39,7 +39,7 @@ import (
 
 	"github.com/mimoo/disco/libdisco"
 
-	logging "github.com/op/go-logging"
+	"github.com/op/go-logging"
 )
 
 var log = logging.MustGetLogger("agent")
@@ -226,46 +226,61 @@ func (a *Agent) Run(ctx context.Context) {
 					for {
 						select {
 						case <-rwctx.Done():
+							log.Debug("Closing Write Routine")
 							return
 						case <-time.After(time.Second * 5):
-							cc.send(Ping{})
+							err = cc.send(Ping{})
+							if err != nil {
+								log.Error("Unable to ping, closing context")
+								rwcancel()
+							}
 						case data, ok := <-a.in:
 							if !ok {
 								break
 							}
 
-							cc.send(data)
+							err = cc.send(data)
+							if err != nil {
+								log.Error("Unable to send data, closing context")
+								rwcancel()
+							}
 						}
 					}
 				}()
 
 				for {
-					o, err := cc.receive()
-					if err == io.EOF {
-						rwcancel()
+					select {
+					case <-rwctx.Done():
 						return
-					} else if err != nil {
-						log.Errorf(err.Error())
-						return
-					}
-
-					switch v := o.(type) {
-					case *ReadWrite:
-						conn := a.conns.Get(v.Laddr, v.Raddr)
-						if conn == nil {
-							break
+					default:
+						o, err := cc.receive()
+						if err == io.EOF {
+							rwcancel()
+							log.Debug("Closing Read Routine")
+							return
+						} else if err != nil {
+							log.Errorf(err.Error())
+							return
 						}
 
-						conn.out <- v.Payload
-					case *EOF:
-						conn := a.conns.Get(v.Laddr, v.Raddr)
-						if conn == nil {
-							break
+						switch v := o.(type) {
+						case *ReadWrite:
+							conn := a.conns.Get(v.Laddr, v.Raddr)
+							if conn == nil {
+								break
+							}
+
+							conn.out <- v.Payload
+						case *EOF:
+							conn := a.conns.Get(v.Laddr, v.Raddr)
+							if conn == nil {
+								break
+							}
+
+							log.Infof("Connection closed: %s => %s", v.Raddr.String(), v.Laddr.String())
+
+							conn.Close()
 						}
-
-						log.Infof("Connection closed: %s => %s", v.Raddr.String(), v.Laddr.String())
-
-						conn.Close()
 					}
 				}
 			}()

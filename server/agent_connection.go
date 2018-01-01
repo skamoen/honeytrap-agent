@@ -104,31 +104,37 @@ func (ac agentConnection) send(o encoding.BinaryMarshaler) error {
 		_, err := ac.Conn.Write([]byte{uint8(TypeHello)})
 		if err != nil {
 			log.Errorf("Error occured writing Hello: %s", err.Error())
+			return err
 		}
 	case Handshake:
 		_, err := ac.Conn.Write([]byte{uint8(TypeHandshake)})
 		if err != nil {
 			log.Errorf("Error occured writing TypeHandshake: %s", err.Error())
+			return err
 		}
 	case HandshakeResponse:
 		_, err := ac.Conn.Write([]byte{uint8(TypeHandshakeResponse)})
 		if err != nil {
 			log.Errorf("Error occured writing TypeHandshakeResponse: %s", err.Error())
+			return err
 		}
 	case ReadWrite:
 		_, err := ac.Conn.Write([]byte{uint8(TypeReadWrite)})
 		if err != nil {
 			log.Errorf("Error occured writing TypeReadWrite: %s", err.Error())
+			return err
 		}
 	case Ping:
 		_, err := ac.Conn.Write([]byte{uint8(TypePing)})
 		if err != nil {
 			log.Errorf("Error occured writing TypePing: %s", err.Error())
+			return err
 		}
 	case EOF:
 		_, err := ac.Conn.Write([]byte{uint8(TypeEOF)})
 		if err != nil {
 			log.Errorf("Error occured writing TypeEOF: %s", err.Error())
+			return err
 		}
 	}
 
