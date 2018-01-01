@@ -154,9 +154,7 @@ func (a *Agent) Run(ctx context.Context) {
 
 	backend := logging.NewLogBackend(os.Stdout, "", 0)
 	backendFormatter := logging.NewBackendFormatter(backend, format)
-	backendLeveled := logging.AddModuleLevel(backend)
-	backendLeveled.SetLevel(logging.DEBUG, "")
-	logging.SetBackend(backendLeveled, backendFormatter)
+	logging.SetBackend(backend, backendFormatter)
 
 	defer log.Infof("Honeytrap Agent stopped.")
 
